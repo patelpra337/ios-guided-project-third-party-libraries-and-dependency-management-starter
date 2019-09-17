@@ -10,6 +10,11 @@ import UIKit
 
 class MessageThreadDetailTableViewController: UITableViewController {
 
+    // MARK: - Properties
+    
+    var messageThread: MessageThread?
+    var messageThreadController: MessageThreadController?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -48,10 +53,5 @@ class MessageThreadDetailTableViewController: UITableViewController {
             destinationVC.messageThreadController = messageThreadController
             destinationVC.messageThread = messageThread
         }
-    }
-    
-    // MARK: - Properties
-
-    var messageThread: MessageThread?
-    var messageThreadController: MessageThreadController?
+    }    
 }
