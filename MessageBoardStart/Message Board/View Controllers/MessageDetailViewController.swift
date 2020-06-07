@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MessageKit
 
 class MessageDetailViewController: UIViewController {
 

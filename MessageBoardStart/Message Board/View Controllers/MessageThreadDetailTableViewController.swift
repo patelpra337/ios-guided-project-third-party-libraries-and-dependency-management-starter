@@ -1,5 +1,5 @@
 //
-//  MessageThreadDetailTableViewController.swift
+//  MessageThreadDetailViewController.swift
 //  Message Board
 //
 //  Created by Spencer Curtis on 8/7/18.
@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import MessageKit
 
-class MessageThreadDetailTableViewController: UITableViewController {
+class MessageThreadDetailViewController: MessagesViewController {
 
     // MARK: - Properties
     
@@ -17,32 +18,13 @@ class MessageThreadDetailTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         title = messageThread?.title
+        messagesCollectionView.messagesDataSource = self
+        messagesCollectionView.messagesLayoutDelegate = self
+        messagesCollectionView.messagesDisplayDelegate = self
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.tableView.reloadData()
-    }
-    
-    // MARK: - UITableViewDataSource
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return messageThread?.messages.count ?? 0
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MessageCell", for: indexPath)
-
-        let message = messageThread?.messages[indexPath.row]
-        
-        cell.textLabel?.text = message?.text
-        cell.detailTextLabel?.text = message?.displayName
-        
-        return cell
-    }
 
     // MARK: - Navigation
 
@@ -54,4 +36,27 @@ class MessageThreadDetailTableViewController: UITableViewController {
             destinationVC.messageThread = messageThread
         }
     }    
+}
+
+extension MessageThreadDetailViewController : MessagesDataSource {
+    
+    func currentSender() -> SenderType {
+        return Sender(senderId: "1", displayName: "Pravin")
+    }
+    
+    func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
+        return messageThread!.messages[indexPath.section]// return the message at index path
+    }
+    
+    func numberOfSections(in messagesCollectionView: MessagesCollectionView) -> Int {
+        return (messageThread!.messages.count)// return total number of messages
+    }
+}
+
+extension MessageThreadDetailViewController : MessagesLayoutDelegate {
+    
+}
+
+extension MessageThreadDetailViewController : MessagesDisplayDelegate {
+    
 }

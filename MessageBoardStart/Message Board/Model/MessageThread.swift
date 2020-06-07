@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MessageKit
 
 class MessageThread: Codable, Equatable {
     
@@ -48,6 +49,23 @@ class MessageThread: Codable, Equatable {
             self.timestamp = timestamp
             
         }
+        
+        struct Sender: SenderType {
+            
+            let messagesSenderName: String
+            init(messagesSenderName: String) {
+                self.messagesSenderName = messagesSenderName
+            }
+            
+            var senderId: String {
+                return displayName
+            }
+            
+            var displayName: String {
+                return messagesSenderName
+            }
+        }
+
     }
     
     static func ==(lhs: MessageThread, rhs: MessageThread) -> Bool {
@@ -56,3 +74,24 @@ class MessageThread: Codable, Equatable {
             lhs.messages == rhs.messages
     }
 }
+
+// Message Thread -> Mesage -> Sender
+extension MessageThread.Message: MessageType {
+
+    var sender: SenderType {
+        return Sender(messagesSenderName: displayName)
+    }
+    var messageId: String {
+        return UUID().uuidString
+    }
+    
+    var sentDate: Date {
+        return timestamp
+    }
+    
+    var kind: MessageKind {
+        return .text(text)
+    }
+    
+}
+
